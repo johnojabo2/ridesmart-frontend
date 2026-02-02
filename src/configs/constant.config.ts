@@ -1,8 +1,16 @@
+// Get environment variables from window (runtime) or fallback to import.meta.env (build time for dev)
+const getEnvVar = (key: string): string => {
+  if (typeof window !== 'undefined' && window.__ENV__) {
+    return window.__ENV__[key as keyof typeof window.__ENV__] || '';
+  }
+  return import.meta.env[key] as string || '';
+};
+
 export const constant = {
-  port: +(import.meta.env.PORT as unknown as number) || 5173,
-  devURL: import.meta.env.VITE_DEV_APP_URL as string,
-  liveURL: import.meta.env.VITE_LIVE_APP_URL as string,
-  FLWPUBKTest: import.meta.env.VITE_FLWPUBKTEST as string,
-  uploadLogo: import.meta.env.VITE_UPLOAD_LOGO as string,
-  appURL: import.meta.env.VITE_APP_URL as string,
+  port: +(getEnvVar('PORT') || '5173'),
+  devURL: getEnvVar('VITE_DEV_APP_URL'),
+  liveURL: getEnvVar('VITE_LIVE_APP_URL'),
+  FLWPUBKTest: getEnvVar('VITE_FLWPUBKTEST'),
+  uploadLogo: getEnvVar('VITE_UPLOAD_LOGO'),
+  appURL: getEnvVar('VITE_APP_URL'),
 };
